@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe606e5d83f1d442a63d9c065965568, type: 3}
+  m_Name: EnemyTeam
+  m_EditorClassIdentifier: com.blaizi.blaze.runtime::Blaze.Runtime.Cms.CmsEntityPfb
+  id: EnemyTeam
+  components:
+  - rid: 5257562482049810508
+  - rid: 5257562482049810518
+  references:
+    version: 2
+    RefIds:
+    - rid: 5257562482049810508
+      type: {class: CmsNameComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        name: Enemy
+    - rid: 5257562482049810518
+      type: {class: CmsEnemyTeamComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        enemyTeam: {fileID: 11400000, guid: 923aa2b440920cb4f964a26c5bdc6402, type: 2}

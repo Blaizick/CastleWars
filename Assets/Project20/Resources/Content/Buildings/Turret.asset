@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe606e5d83f1d442a63d9c065965568, type: 3}
+  m_Name: Turret
+  m_EditorClassIdentifier: com.blaizi.blaze.runtime::Blaze.Runtime.Cms.CmsEntityPfb
+  id: Turret
+  components:
+  - rid: 5257562458793705659
+  - rid: 5257562458793705660
+  - rid: 5257562458793705661
+  - rid: 5257562458793705665
+  - rid: 5257562482049810432
+  - rid: 5257562482049810506
+  - rid: 5257562482049810514
+  - rid: 5257562482049810515
+  - rid: 5257562482049810516
+  - rid: 5257562482049810519
+  - rid: 5257562498778792186
+  - rid: 5257562498778792191
+  references:
+    version: 2
+    RefIds:
+    - rid: 5257562458793705659
+      type: {class: CmsSquareSizeComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        size: 1
+    - rid: 5257562458793705660
+      type: {class: CmsPfbComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        pfb: {fileID: 4906769222331495048, guid: 99641b0ad4b604341985d0e639978fac, type: 3}
+    - rid: 5257562458793705661
+      type: {class: CmsSpriteComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        sprite: {fileID: -8078966772632430244, guid: e35c3bf0c362c264c8ddfdbb63308936, type: 3}
+    - rid: 5257562458793705665
+      type: {class: CmsNameComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        name: Turret
+    - rid: 5257562482049810432
+      type: {class: CmsBuildCostComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        cost:
+          item: {fileID: 11400000, guid: b5b2881195a4e3a43949b6721e458a6b, type: 2}
+          count: 50
+    - rid: 5257562482049810506
+      type: {class: CmsHealthComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        maxHealth: 100
+    - rid: 5257562482049810514
+      type: {class: CmsProjectileComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        projectile: {fileID: 11400000, guid: 2cee6af571196ef43b413b90bdf6801a, type: 2}
+    - rid: 5257562482049810515
+      type: {class: CmsRotationSpeedComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        rotationSpeed: 360
+    - rid: 5257562482049810516
+      type: {class: CmsAttackSpeedComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        attackSpeed: 1
+    - rid: 5257562482049810519
+      type: {class: CmsRotationOffsetComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        rotationOffset: -90
+    - rid: 5257562498778792186
+      type: {class: CmsRecoilComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        recoildStreangth: 0.1
+        recoilDuration: 0.5
+    - rid: 5257562498778792191
+      type: {class: CmsDescComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        desc: Shoots Enemies
