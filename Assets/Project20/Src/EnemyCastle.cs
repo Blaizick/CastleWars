@@ -68,7 +68,7 @@ namespace Proj21
 
         public void Init()
         {
-            profile = Cms.GetEntity("Level0");
+            profile = LevelsSystem.level;
         }
 
         public void Restart()

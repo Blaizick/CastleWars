@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Blaze.Runtime.Cms;
 using Unity.Cinemachine;
-using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 namespace Proj21
 {
@@ -25,8 +27,6 @@ namespace Proj21
 
         IEnumerator InitCoroutine()
         {
-            Cms.LoadAll("Content");
-
             Vars.player = player;
             Vars.input = input;
             Vars.camera = _camera;
@@ -39,8 +39,10 @@ namespace Proj21
             Vars.restart = new();
             Vars.effects = effects;
             Vars.levels = new();
+            Vars.saveSystem = new();
 
-            Vars.levels.Load(Cms.GetEntity("Level0"));
+            Vars.saveSystem.Load();
+
             Vars.sessionTimer.Restart();
             Vars.teams.Init();
             Vars.input.Init();
@@ -49,20 +51,14 @@ namespace Proj21
             Vars.ui.Init();
             Vars.tutorial.Init();
 
-            bool playTutorial = false;
-
-            if (playTutorial)
+            if (LevelsSystem.level.HasComponent<CmsTutorialLevelTag>())
             {
                 yield return StartCoroutine(Vars.tutorial.TutorialCoroutine());
-                Vars.restart.Restart();
-                yield return StartCoroutine(Vars.ui.textScreen.HideCoroutine());
             }
             else
             {
                 Vars.restart.Restart();
-                // Vars.items.Add(new ItemStack(Items.Essence, 1000));
             }
-
 
             yield break;
         }
@@ -73,11 +69,12 @@ namespace Proj21
 
             Vars.camera.GetComponent<CinemachineConfiner2D>().InvalidateLensCache();
 
-            if (Vars.levels.Finished)
+            if (Vars.levels.CanBeFinished && Vars.levels.Finished)
             {
                 Vars.enemySpawner.active = false;
                 if (Vars.teams.enemy.castles.castles.Count == 0)
                 {
+                    Vars.levels.Complete(LevelsSystem.level);
                     Vars.ui.winScreenRoot.SetActive(true);
                 }
             }
@@ -98,6 +95,9 @@ namespace Proj21
         public static RestartSystem restart;
         public static EffectsSystem effects;
         public static LevelsSystem levels;
+        public static UiMenu uiMenu;
+        public static DesktopInputMenu inputMenu;
+        public static SaveSystem saveSystem;
     }
 
     [Serializable]
@@ -218,14 +218,22 @@ namespace Proj21
 
     public class LevelsSystem
     {
-        public CmsEntity level;
+        public static CmsEntity level = null;
 
-        public float Duration => level.GetComponent<CmsLevelDurationComp>().duration;
+        public float Duration => level.HasComponent<CmsLevelDurationComp>() ? level.GetComponent<CmsLevelDurationComp>().duration : 0;
         public bool Finished => Vars.sessionTimer.GetTime() >= Duration;
+        public bool CanBeFinished => !level.HasComponent<CmsTutorialLevelTag>();
 
-        public void Load(CmsEntity level)
+        public List<CmsEntity> completedLevels = new();
+
+        public void Set(CmsEntity level)
         {
-            this.level = level;
+            LevelsSystem.level = level;
+        }
+
+        public void LoadLevel()
+        {
+            SceneManager.LoadScene("SampleScene");
         }
 
         public void Restart()
@@ -235,6 +243,67 @@ namespace Proj21
             {
                 Vars.items.Add(i.itemStack.AsItemStack());
             }
+        }
+
+        public void BackToMenu()
+        {
+            SceneManager.LoadScene("MenuScene");
+        }
+
+        public void Complete(CmsEntity _level)
+        {
+            if (!completedLevels.Contains(_level))
+            {
+                completedLevels.Add(_level);
+                Vars.saveSystem.Save();
+            }
+        }
+
+        public bool IsCompleted(CmsEntity _level)
+        {
+            return completedLevels.Contains(_level);
+        }
+
+        public bool IsAwailable(CmsEntity _level)
+        {
+            foreach (var i in _level.GetAllComponentsOfType<CmsRequireCompletedLevel>())
+            {
+                if (!IsCompleted(i.requiredLevel.GetCmsEntity()))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    public class Save
+    {
+        public List<string> completedLevels = new();
+    }
+
+    public class SaveSystem
+    {
+        public string SavePath => Path.Combine(UnityEngine.Application.persistentDataPath, "save.json");
+
+        public void Save()
+        {
+            var save = new Save();
+            save.completedLevels = Vars.levels.completedLevels.Select(i => i.Id).ToList();
+            var json = JsonUtility.ToJson(save);
+            File.WriteAllText(SavePath, json);
+        }
+
+        public void Load()
+        {
+            if (!File.Exists(SavePath))
+            {
+                Save();
+                return;
+            }
+            var json = File.ReadAllText(SavePath);
+            var save = JsonUtility.FromJson<Save>(json);
+            Vars.levels.completedLevels = save.completedLevels.Select(i => Cms.GetEntity(i)).ToList();
         }
     }
 
@@ -247,5 +316,17 @@ namespace Proj21
     public class CmsAddItemStackOnInitComp : CmsComponent
     {
         public CmsItemStack itemStack;
+    }
+
+    [Serializable]
+    public class CmsTutorialLevelTag : CmsComponent
+    {
+        
+    }
+
+    [Serializable]
+    public class CmsRequireCompletedLevel : CmsComponent
+    {
+        public CmsEntityPfb requiredLevel;
     }
 }

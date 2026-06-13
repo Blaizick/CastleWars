@@ -43,9 +43,13 @@ namespace Proj21
 
         public GameObject winScreenRoot;
         public Button winScreenRestartBtn;
+        public Button winScreenBackToMenuBtn;
 
         public GameObject loseScreenRoot;
         public Button loseScreenRestartBtn;
+        public Button loseScreenBackToMenuBtn;
+
+        public SceneTransitionScreen sceneTransitionScreen;
 
         public void Init()
         {
@@ -75,11 +79,28 @@ namespace Proj21
             {
                 Vars.restart.Restart();
             });
+            winScreenBackToMenuBtn.onClick.AddListener(() =>
+            {
+                sceneTransitionScreen.PlayShowAnim(() =>
+                {
+                    Vars.levels.BackToMenu();
+                });
+            });
+
             loseScreenRoot.SetActive(false);
             loseScreenRestartBtn.onClick.AddListener(() =>
             {
                 Vars.restart.Restart();
             });
+            loseScreenBackToMenuBtn.onClick.AddListener(() =>
+            {
+                sceneTransitionScreen.PlayShowAnim(() =>
+                {
+                    Vars.levels.BackToMenu();
+                });
+            });
+
+            sceneTransitionScreen.PlayHideAnim();
         }
 
         public void Restart()

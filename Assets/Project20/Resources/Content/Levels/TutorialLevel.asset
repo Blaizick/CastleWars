@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe606e5d83f1d442a63d9c065965568, type: 3}
+  m_Name: TutorialLevel
+  m_EditorClassIdentifier: com.blaizi.blaze.runtime::Blaze.Runtime.Cms.CmsEntityPfb
+  id: TutorialLevel
+  components:
+  - rid: 5257562541538410588
+  - rid: 5257562541538410591
+  - rid: 5257562541538410593
+  references:
+    version: 2
+    RefIds:
+    - rid: 5257562541538410588
+      type: {class: CmsTutorialLevelTag, ns: Proj21, asm: Assembly-CSharp}
+      data: 
+    - rid: 5257562541538410591
+      type: {class: CmsNameComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        name: Tutorial
+    - rid: 5257562541538410593
+      type: {class: CmsSpriteComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        sprite: {fileID: 189133071, guid: ed6019e49749b924f8619a9d611598ea, type: 3}

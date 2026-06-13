@@ -80,13 +80,13 @@ namespace Proj21
                 yield return coroutine;
             }
             yield return Vars.ui.textScreen.WaitUntilClick();
-
-            Vars.enemySpawner.active = true;
-            Vars.ui.taskUiRoot.SetActive(false);
-            Vars.teams.ally.castles.Destroy(Vars.player.castle);
-            Vars.items.Reset();
-            Vars.ui.timeBlockRoot.gameObject.SetActive(true);
-            Vars.sessionTimer.Restart();
+        
+            Vars.levels.Complete(LevelsSystem.level);
+            
+            Vars.ui.sceneTransitionScreen.PlayShowAnim(() =>
+            {
+                Vars.levels.BackToMenu();
+            });
         }
 
         public void Update()

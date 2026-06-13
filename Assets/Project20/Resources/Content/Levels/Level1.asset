@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe606e5d83f1d442a63d9c065965568, type: 3}
+  m_Name: Level1
+  m_EditorClassIdentifier: com.blaizi.blaze.runtime::Blaze.Runtime.Cms.CmsEntityPfb
+  id: Level1
+  components:
+  - rid: 5257562541538410577
+  - rid: 5257562541538410580
+  - rid: 5257562541538410586
+  - rid: 5257562541538410587
+  - rid: 5257562541538410589
+  - rid: 5257562541538410590
+  - rid: 5257562541538410592
+  references:
+    version: 2
+    RefIds:
+    - rid: 5257562541538410577
+      type: {class: CmsEnemySpawnerComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        minTime: 5
+        castleSpawns:
+        - chance: 1
+          castleSpawns:
+          - count: 1
+            castle: {fileID: 11400000, guid: 72a1843e728ee384da180ed8c8ccab35, type: 2}
+        timeBetweenSpawns: 5
+    - rid: 5257562541538410580
+      type: {class: CmsLevelDurationComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        duration: 40
+    - rid: 5257562541538410586
+      type: {class: CmsPlayerCastleComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        playerCastle: {fileID: 11400000, guid: d41ce7d0185f88d48aff5114b8a31c06, type: 2}
+    - rid: 5257562541538410587
+      type: {class: CmsAddItemStackOnInitComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        itemStack:
+          item: {fileID: 11400000, guid: b5b2881195a4e3a43949b6721e458a6b, type: 2}
+          count: 100
+    - rid: 5257562541538410589
+      type: {class: CmsRequireCompletedLevel, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        requiredLevel: {fileID: 11400000, guid: 3c3529eb18c739c41af53dc4a4f76641, type: 2}
+    - rid: 5257562541538410590
+      type: {class: CmsNameComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        name: Level 1
+    - rid: 5257562541538410592
+      type: {class: CmsSpriteComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        sprite: {fileID: 524364033, guid: ed6019e49749b924f8619a9d611598ea, type: 3}
