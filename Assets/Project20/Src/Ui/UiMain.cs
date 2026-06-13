@@ -96,14 +96,16 @@ namespace Proj21
             setCastlesModeState.root.SetActive(!Vars.input.castlesMode);
             setBuildingsModeState.root.SetActive(Vars.input.castlesMode);
         
-            timeText.text = $"{(int)Vars.sessionTimer.GetTime()}/{(int)ImpsMain.TimeToWin} sec";
+            if (Vars.levels.Finished)
+            {
+                timeText.text = $"Finished";
+            }
+            else
+            {
+                timeText.text = $"{(int)Vars.sessionTimer.GetTime()}/{(int)Vars.levels.Duration} sec";
+            }
             
             buildingTypeTooltip.root.SetActive(Vars.input.sBuild != null);
-
-            if (Vars.sessionTimer.GetTime() >= ImpsMain.TimeToWin)
-            {
-                winScreenRoot.SetActive(true);
-            }
         }
     }
 }

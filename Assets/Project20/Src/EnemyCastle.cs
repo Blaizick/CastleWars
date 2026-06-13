@@ -1,6 +1,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Blaze.Runtime.Cms;
 using UnityEngine;
@@ -34,22 +35,47 @@ namespace Proj21
         }
     }
 
+
+    [Serializable]
+    public class CmsEnemySpawnerComp : CmsComponent
+    {
+        public float minTime;
+        public List<CmsCastleSpawns> castleSpawns = new();
+        public float timeBetweenSpawns;
+
+        [Serializable]
+        public class CmsCastleSpawns
+        {
+            public float chance;
+            
+            [Serializable]
+            public class CmsCastleSpawn
+            {
+                public int count;
+                public CmsEntityPfb castle;
+            } 
+    
+            public List<CmsCastleSpawn> castleSpawns = new();
+        }
+    }
+
     public class EnemySpawner
     {
+        public CmsEntity profile;
+
         public float progress = 0.0f;        
+        public bool active = true;
 
         public void Init()
         {
-            
+            profile = Cms.GetEntity("Level0");
         }
 
         public void Restart()
         {
-            playing = true;
+            active = true;
             progress = 0.0f;
         }
-
-        public bool playing = true;
 
         public void Update()
         {
@@ -57,41 +83,59 @@ namespace Proj21
             {
                 return;
             }
-            if (!playing)
+            if (!active)
             {
                 return;
             }
 
-            if (Vars.sessionTimer.GetTime() >= 20.0f)
+            CmsEnemySpawnerComp comp = null;
+            
+            foreach (var i in profile.GetAllComponentsOfType<CmsEnemySpawnerComp>())
             {
-                progress += Time.deltaTime / 5.0f;
-                if (progress >= 1.0f)
+                if (Vars.sessionTimer.GetTime() >= i.minTime && (comp == null || comp.minTime < i.minTime))
                 {
-                    Vector2 tPos = Vars.player.castle.transform.position;
-                    Vector2 pos = Vector2.zero;
-                    do
-                    {
-                        pos = tPos + new Vector2(UnityEngine.Random.Range(-20.0f, 20.0f), UnityEngine.Random.Range(-20.0f, 20.0f));
-                    }
-                    while (Vector2.Distance(tPos, pos) <= 10.0f);
-                    Vars.teams.enemy.castles.Create(Cms.GetEntity("EnemyCastle1"), pos);
-                    progress = 0.0f;
+                    comp = i;
                 }
             }
-            else
+
+            if (comp != null)
             {
-                progress += Time.deltaTime / 5.0f;
+                progress += Time.deltaTime / comp.timeBetweenSpawns;
+
                 if (progress >= 1.0f)
                 {
-                    Vector2 tPos = Vars.player.castle.transform.position;
-                    Vector2 pos = Vector2.zero;
-                    do
+                    float random = UnityEngine.Random.Range(0.0f, 1.0f);
+
+                    CmsEnemySpawnerComp.CmsCastleSpawns castleSpawns = null;
+
+                    float tmp = 0;
+
+                    foreach (var i in comp.castleSpawns)
                     {
-                        pos = tPos + new Vector2(UnityEngine.Random.Range(-20.0f, 20.0f), UnityEngine.Random.Range(-20.0f, 20.0f));
+                        tmp += i.chance;
+
+                        if (random >= tmp - i.chance && random <= tmp)
+                        {
+                            castleSpawns = i;
+                            break;
+                        }
                     }
-                    while (Vector2.Distance(tPos, pos) <= 10.0f);
-                    Vars.teams.enemy.castles.Create(Cms.GetEntity("EnemyCastle0"), pos);
-                    progress = 0.0f;
+
+                    foreach (var i in castleSpawns.castleSpawns)
+                    {
+                        for (int j = 0; j < i.count; j++)
+                        {
+                            Vector2 tPos = Vars.player.castle.transform.position;
+                            Vector2 pos = Vector2.zero;
+                            do
+                            {
+                                pos = tPos + new Vector2(UnityEngine.Random.Range(-20.0f, 20.0f), UnityEngine.Random.Range(-20.0f, 20.0f));
+                            }
+                            while (Vector2.Distance(tPos, pos) <= 10.0f);
+                            Vars.teams.enemy.castles.Create(i.castle.GetCmsEntity(), pos);
+                            progress = 0.0f;
+                        }
+                    }
                 }
             }
         }
@@ -102,5 +146,11 @@ namespace Proj21
     {
         public Vector2Int position;
         public CmsEntityPfb building;
+    }
+
+    [Serializable]
+    public class CmsLevelDurationComp : CmsComponent
+    {
+        public float duration;
     }
 }

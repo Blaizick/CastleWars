@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using Blaze.Runtime.Cms;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Proj21
@@ -26,6 +24,7 @@ namespace Proj21
         public Rigidbody2D rb;
 
         public SpriteRenderer shadowSpriteRenderer;
+        public SpriteRenderer outlineSpriteRenderer;
 
         [NonSerialized] public List<Building> buildings = new();
 
@@ -63,10 +62,13 @@ namespace Proj21
             healthC.SetFromCmsEntity(cmsEntity);
             healthC.Set1(this);
             healthC.Init();
-            healthC.onDie.AddListener(() => Destroy(gameObject));
+            healthC.onDie.AddListener(() => teamC.team.castles.Destroy(this));
         
-            shadowSpriteRenderer.transform.position = CenterPosition - new Vector2(0.25f, 0.25f);
-            shadowSpriteRenderer.transform.localScale = new Vector2(size.x, size.y);
+            outlineSpriteRenderer.transform.position = CenterPosition;
+            outlineSpriteRenderer.transform.localScale = new Vector2(size.x + 0.2f, size.y + 0.2f);
+
+            shadowSpriteRenderer.transform.position = CenterPosition - new Vector2(0.2f, 0.2f);
+            shadowSpriteRenderer.transform.localScale = new Vector2(size.x + 0.2f, size.y + 0.2f);
         }
 
         public virtual void Update()
@@ -76,7 +78,7 @@ namespace Proj21
 
         public virtual void OnDestroy()
         {
-            teamC.team.castles.castles.Remove(this);
+            // teamC.team.castles.castles.Remove(this);
         }
 
         public Vector2 GridToWorldPosition(Vector2Int gPos)
@@ -161,11 +163,10 @@ namespace Proj21
             return true;
         }
 
-        public Building CreateBuilding(CmsEntity build, Vector2Int pos)
+        public Building CreateBuilding(CmsEntity build, Vector2Int pos, int size, GameObject prefab)
         {
-            int size = build.GetComponent<CmsSquareSizeComp>().size;
             Vector2 wPos = GetRectPosition(pos, size);
-            var b = Instantiate(build.GetComponent<CmsPfbComp>().pfb, wPos, Quaternion.identity, transform).GetComponent<Building>();
+            var b = Instantiate(prefab, wPos, Quaternion.identity, transform).GetComponent<Building>();
             b.castle = this;
             b.pos = pos;
             b.cmsEntity = build;
@@ -177,6 +178,30 @@ namespace Proj21
             b.Init();
             buildings.Add(b);
             return b;
+        }
+        public Building CreateBuilding(CmsEntity build, Vector2Int pos)
+        {
+            return CreateBuilding(build, 
+                pos, 
+                build.GetComponent<CmsSquareSizeComp>().size, 
+                build.GetComponent<CmsPfbComp>().pfb
+                );
+        }
+
+        public void FinishCostructing(ConstructBuilding constructBuilding)
+        {
+            var cmsEnt = constructBuilding.cmsEntity;
+            var pos = constructBuilding.pos;
+            DestroyBuilding(constructBuilding);
+            CreateBuilding(cmsEnt, pos);
+        }
+
+        public void StartConstructing(CmsEntity build, Vector2Int pos)
+        {
+            var constructBuildEnt = Cms.GetEntity("ConstructBuilding");
+            int size = build.GetComponent<CmsSquareSizeComp>().size;
+            var pfb = constructBuildEnt.GetComponent<CmsPfbComp>().pfb;
+            CreateBuilding(build, pos, size, pfb);
         }
 
         public void DestroyBuilding(Building build)

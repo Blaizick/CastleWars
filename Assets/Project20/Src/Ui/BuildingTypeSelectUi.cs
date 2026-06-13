@@ -1,9 +1,6 @@
-
-
 using System;
 using System.Collections.Generic;
 using Blaze.Runtime.Cms;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Proj21
@@ -75,7 +72,8 @@ namespace Proj21
     {
         public static CmsEntity Turret => Cms.GetEntity("Turret");
         public static CmsEntity Collector => Cms.GetEntity("Collector");
+        public static CmsEntity SniperTurret => Cms.GetEntity("SniperTurret");
 
-        public static List<CmsEntity> All => new(){Turret, Collector};
+        public static List<CmsEntity> All => new(){Turret, Collector, SniperTurret,};
     }
 }

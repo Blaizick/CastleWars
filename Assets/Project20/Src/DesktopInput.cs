@@ -167,7 +167,8 @@ namespace Proj21
                                 {
                                     Vars.items.Remove(c.cost.AsItemStack());
                                 }
-                                Vars.player.castle.CreateBuilding(sBuild, buildGridPos);
+                                Vars.player.castle.StartConstructing(sBuild, buildGridPos);
+                                // Vars.player.castle.CreateBuilding(sBuild, buildGridPos);
                             }
                         }
                     }

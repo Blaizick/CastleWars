@@ -1,6 +1,7 @@
 using System.Collections;
 using Blaze.Runtime.Cms;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Proj21
 {
@@ -15,40 +16,43 @@ namespace Proj21
         {
             Vars.player.castle = (PlayerCastle)Vars.teams.ally.castles.Create(Cms.GetEntity("TestPlayerCastle0"), Vector2.zero);
             Vars.items.Add(new ItemStack(Items.Essence, 50));
-            Vars.enemySpawner.playing = false;
+            Vars.enemySpawner.active = false;
             Vars.ui.timeBlockRoot.gameObject.SetActive(false);
 
             Vars.ui.textScreen.canvasGroup.alpha = 1.0f;
             Vars.ui.textScreen.root.SetActive(true);
             yield return Vars.ui.textScreen.WriteTextCoroutine("Hi!");            
             yield return Vars.ui.textScreen.WaitUntilClick();
-            yield return Vars.ui.textScreen.WriteTextCoroutine("Your goal is to survive.");
+            yield return Vars.ui.textScreen.WriteTextCoroutine("Your goal is to survive and kill all enemy castles.");
             yield return Vars.ui.textScreen.WaitUntilClick();
             yield return Vars.ui.textScreen.WriteTextCoroutine("Enemies will attack you from all sides.");
             yield return Vars.ui.textScreen.WaitUntilClick();
             Vars.ui.taskUiRoot.SetActive(true);
-            var coroutine = Vars.ui.taskUiWriter.WriteCoroutine("Select the Collector in the bottom-left panel.");
+            var collector = BuildingTypes.Collector;
+            var coroutine = Vars.ui.taskUiWriter.WriteCoroutine($"Select the {collector.GetComponent<CmsNameComp>().name} in the bottom-left panel.");
             yield return Vars.ui.textScreen.HideCoroutine();
             if (coroutine != null)
             {
                 yield return coroutine;
             }
-            while (Vars.input.sBuild != BuildingTypes.Collector)
+            while (Vars.input.sBuild != collector)
             {
                 yield return null;
             }
-            yield return Vars.ui.taskUiWriter.WriteCoroutine("Build a Collector on your castle (Left Mouse Button).");
-            while (!Vars.player.castle.buildings.Find(i => i.cmsEntity == BuildingTypes.Collector))
+            yield return Vars.ui.taskUiWriter.WriteCoroutine($"Build a {collector.GetComponent<CmsNameComp>().name} on your castle (Left Mouse Button).");
+            while (!Vars.player.castle.buildings.Find(i => i.cmsEntity == collector))
             {
                 yield return null;
             }
-            yield return Vars.ui.taskUiWriter.WriteCoroutine("Good boy! Collectors gather Essence from the air. Wait until you have 50 Essence.");
-            while (!Vars.items.Has(new ItemStack(Items.Essence, 50)))
+            var turret = BuildingTypes.Turret;
+            var turretCost = turret.GetComponent<CmsBuildCostComp>().cost.AsItemStack();
+            yield return Vars.ui.taskUiWriter.WriteCoroutine($"Good boy! Collectors gather Essence from the air. Wait until you have {turretCost.count} Essence.");
+            while (!Vars.items.Has(turretCost))
             {
                 yield return null;
             }
-            yield return Vars.ui.taskUiWriter.WriteCoroutine("Build a Turret");
-            while (!Vars.player.castle.buildings.Find(i => i.cmsEntity == BuildingTypes.Turret))
+            yield return Vars.ui.taskUiWriter.WriteCoroutine($"Build a {turret.GetComponent<CmsNameComp>().name}");
+            while (!Vars.player.castle.buildings.Find(i => i.cmsEntity == turret))
             {
                 yield return null;
             }
@@ -59,7 +63,7 @@ namespace Proj21
             {
                 yield return null;
             }
-            yield return Vars.ui.taskUiWriter.WriteCoroutine("You can move your castle. Switch to Castle Control Mode (F or the button in the bottom-left corner), then Right Mouse Button to move.");
+            yield return Vars.ui.taskUiWriter.WriteCoroutine($"You can move your castle. Switch to Castle Control Mode ({Vars.input.actions.Player.SwitchCastlesMode.GetBindingDisplayString()} or the button in the bottom-left corner), then Right Mouse Button to move.");
             while (!Vars.player.castle.moving)
             {
                 yield return null;
@@ -77,7 +81,7 @@ namespace Proj21
             }
             yield return Vars.ui.textScreen.WaitUntilClick();
 
-            Vars.enemySpawner.playing = true;
+            Vars.enemySpawner.active = true;
             Vars.ui.taskUiRoot.SetActive(false);
             Vars.teams.ally.castles.Destroy(Vars.player.castle);
             Vars.items.Reset();

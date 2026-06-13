@@ -1,9 +1,7 @@
-
-
 using System;
-using System.Globalization;
 using Blaze.Runtime.Cms;
 using DG.Tweening;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace Proj21
@@ -15,6 +13,9 @@ namespace Proj21
         public Transform shootPositionTr;
         [NonSerialized] public Transform targetTr;
         [NonSerialized] public float reloadProgress;
+        public Tween recoilTween = null;
+        [NonSerialized] public CmsEntity projectile = null;
+        [NonSerialized] public int projectileCount;
 
         public override void Update()
         {
@@ -58,17 +59,53 @@ namespace Proj21
                 towerRootTr.transform.rotation = Quaternion.RotateTowards(towerRootTr.rotation, 
                     Quaternion.Euler(0.0f, 0.0f, targetRot), 
                     cmsEntity.GetComponent<CmsRotationSpeedComp>().rotationSpeed * Time.deltaTime);
-                if (reloadProgress >= 1.0f)
+                if (projectileCount <= 0)
                 {
-                    var inst = Instantiate(projectile.GetComponent<CmsPfbComp>().pfb, shootPositionTr.transform.position, Quaternion.identity).GetComponent<Projectile>();
-                    inst.Set(teamC.team, projectile, dir);
-                    inst.Init();
-                    reloadProgress = 0.0f;
+                    var projCost = projectile.GetComponent<CmsProjectileCostComp>();
+                    var cost = projCost.itemCost.AsItemStack();
+                    if (Vars.items.Has(cost))
+                    {
+                        Vars.items.Remove(cost);
+                        this.projectile = projectile;
+                        projectileCount += projCost.count;
+                    }
+                }
+                if (reloadProgress >= 1.0f && 
+                    Mathf.Abs(Mathf.DeltaAngle(towerRootTr.transform.eulerAngles.z, targetRot)) <= 5.0f && 
+                    projectileCount > 0)
+                {
+                    if (--projectileCount <= 0)
+                    {
+                        this.projectile = null;
+                    }
+                    int count = 1;
+                    if (projectile.HasComponent<CmsProjectileCountComp>())
+                    {
+                        count = projectile.GetComponent<CmsProjectileCountComp>().projectilesCount;
+                    }
+                    for (int i = 0; i < count; i++)
+                    {
+                        float maxRandomOffset = projectile.GetComponent<CmsRandomOffsetComp>().randomOffset / 2;
+                        float rot = (towerRootTr.eulerAngles.z + UnityEngine.Random.Range(-maxRandomOffset, maxRandomOffset) - rotOffset) * Mathf.Deg2Rad;
+                        Vector2 dir2 = new Vector2(Mathf.Cos(rot), Mathf.Sin(rot));
 
-                    CmsRecoilComp recoilComp = cmsEntity.GetComponent<CmsRecoilComp>();
-                    var punchDeg = towerRootTr.eulerAngles.z + rotOffset;
-                    var punch = new Vector2(Mathf.Cos(punchDeg * Mathf.Deg2Rad), Mathf.Sin(punchDeg * Mathf.Deg2Rad)) * recoilComp.recoildStreangth;
-                    towerRootTr.DOPunchPosition(punch, recoilComp.recoilDuration);
+                        var inst = Instantiate(projectile.GetComponent<CmsPfbComp>().pfb, shootPositionTr.transform.position, Quaternion.identity).GetComponent<Projectile>();
+                        inst.Set(teamC.team, projectile, dir2);
+                        inst.Init();
+                        reloadProgress = 0.0f;
+
+                        CmsRecoilComp recoilComp = cmsEntity.GetComponent<CmsRecoilComp>();
+                        var punchDeg = towerRootTr.eulerAngles.z + rotOffset;
+                        var punch = new Vector2(Mathf.Cos(punchDeg * Mathf.Deg2Rad), Mathf.Sin(punchDeg * Mathf.Deg2Rad)) * recoilComp.recoildStreangth;
+                        if (recoilTween != null)
+                        {
+                            recoilTween.Complete();
+                        }
+                        recoilTween = towerRootTr.DOPunchPosition(punch, recoilComp.recoilDuration).OnComplete(() =>
+                        {
+                            recoilTween = null;
+                        });
+                    }
                 }
             }
 
@@ -125,5 +162,24 @@ namespace Proj21
     {
         public float recoildStreangth;
         public float recoilDuration;
+    }
+
+    [Serializable]
+    public class CmsProjectileCountComp : CmsComponent
+    {
+        public int projectilesCount;
+    }
+
+    [Serializable]
+    public class CmsRandomOffsetComp : CmsComponent
+    {
+        public float randomOffset;
+    }
+
+    [Serializable]
+    public class CmsProjectileCostComp : CmsComponent
+    {
+        public CmsItemStack itemCost;
+        public int count;
     }
 }

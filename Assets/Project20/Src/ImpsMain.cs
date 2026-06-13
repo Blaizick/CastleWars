@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Blaze.Runtime.Cms;
 using Unity.Cinemachine;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace Proj21
@@ -16,8 +17,6 @@ namespace Proj21
         public UiMain ui;
         public TutorialSystem tutorial;
         public EffectsSystem effects;
-
-        public const float TimeToWin = 60.0f;
 
         void Start()
         {
@@ -39,7 +38,9 @@ namespace Proj21
             Vars.tutorial = tutorial;
             Vars.restart = new();
             Vars.effects = effects;
+            Vars.levels = new();
 
+            Vars.levels.Load(Cms.GetEntity("Level0"));
             Vars.sessionTimer.Restart();
             Vars.teams.Init();
             Vars.input.Init();
@@ -48,11 +49,20 @@ namespace Proj21
             Vars.ui.Init();
             Vars.tutorial.Init();
 
-            yield return StartCoroutine(Vars.tutorial.TutorialCoroutine());
+            bool playTutorial = false;
 
-            Vars.restart.Restart();
+            if (playTutorial)
+            {
+                yield return StartCoroutine(Vars.tutorial.TutorialCoroutine());
+                Vars.restart.Restart();
+                yield return StartCoroutine(Vars.ui.textScreen.HideCoroutine());
+            }
+            else
+            {
+                Vars.restart.Restart();
+                // Vars.items.Add(new ItemStack(Items.Essence, 1000));
+            }
 
-            yield return StartCoroutine(Vars.ui.textScreen.HideCoroutine());
 
             yield break;
         }
@@ -62,6 +72,15 @@ namespace Proj21
             Vars.enemySpawner.Update();
 
             Vars.camera.GetComponent<CinemachineConfiner2D>().InvalidateLensCache();
+
+            if (Vars.levels.Finished)
+            {
+                Vars.enemySpawner.active = false;
+                if (Vars.teams.enemy.castles.castles.Count == 0)
+                {
+                    Vars.ui.winScreenRoot.SetActive(true);
+                }
+            }
         }
     }
 
@@ -78,6 +97,7 @@ namespace Proj21
         public static TutorialSystem tutorial;
         public static RestartSystem restart;
         public static EffectsSystem effects;
+        public static LevelsSystem levels;
     }
 
     [Serializable]
@@ -192,9 +212,40 @@ namespace Proj21
             Vars.items.Reset();
             Vars.teams.Restart();
             Vars.ui.Restart();
-
-            Vars.player.castle = (PlayerCastle)Vars.teams.ally.castles.Create(Cms.GetEntity("PlayerCastle0"), Vector2.zero);
-            Vars.items.Add(new ItemStack(Items.Essence, 100));
+            Vars.levels.Restart();
         }
+    }
+
+    public class LevelsSystem
+    {
+        public CmsEntity level;
+
+        public float Duration => level.GetComponent<CmsLevelDurationComp>().duration;
+        public bool Finished => Vars.sessionTimer.GetTime() >= Duration;
+
+        public void Load(CmsEntity level)
+        {
+            this.level = level;
+        }
+
+        public void Restart()
+        {
+            Vars.player.castle = (PlayerCastle)Vars.teams.ally.castles.Create(level.GetComponent<CmsPlayerCastleComp>().playerCastle.GetCmsEntity(), Vector2.zero);
+            foreach (var i in level.GetAllComponentsOfType<CmsAddItemStackOnInitComp>())
+            {
+                Vars.items.Add(i.itemStack.AsItemStack());
+            }
+        }
+    }
+
+    [Serializable]
+    public class CmsPlayerCastleComp : CmsComponent
+    {
+        public CmsEntityPfb playerCastle;
+    }
+    [Serializable]
+    public class CmsAddItemStackOnInitComp : CmsComponent
+    {
+        public CmsItemStack itemStack;
     }
 }

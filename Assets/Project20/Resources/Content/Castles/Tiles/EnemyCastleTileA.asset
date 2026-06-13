@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe606e5d83f1d442a63d9c065965568, type: 3}
+  m_Name: EnemyCastleTileA
+  m_EditorClassIdentifier: com.blaizi.blaze.runtime::Blaze.Runtime.Cms.CmsEntityPfb
+  id: EnemyCastleTileA
+  components:
+  - rid: 5257562436451172540
+  references:
+    version: 2
+    RefIds:
+    - rid: 5257562436451172540
+      type: {class: CmsPfbComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        pfb: {fileID: 4559975376908110533, guid: 2350a965eab849f40a74bd3143198792, type: 3}
