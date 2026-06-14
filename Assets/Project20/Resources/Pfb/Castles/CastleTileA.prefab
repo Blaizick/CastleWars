@@ -104,3 +104,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee890fe60dc8b97409610fedc225c5a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Proj21.Tile
+  spriteRenderer: {fileID: 671777834380633452}

@@ -238,7 +238,8 @@ namespace Proj21
 
         public void Restart()
         {
-            Vars.player.castle = (PlayerCastle)Vars.teams.ally.castles.Create(level.GetComponent<CmsPlayerCastleComp>().playerCastle.GetCmsEntity(), Vector2.zero);
+            Vars.teams.ally.castles.StartConstructing(level.GetComponent<CmsPlayerCastleComp>().playerCastle.GetCmsEntity(), Vector2.zero).onAppear.AddListener(castle => Vars.player.castle = (PlayerCastle)castle);
+            // Vars.player.castle = (PlayerCastle)Vars.teams.ally.castles.Create(level.GetComponent<CmsPlayerCastleComp>().playerCastle.GetCmsEntity(), Vector2.zero);
             foreach (var i in level.GetAllComponentsOfType<CmsAddItemStackOnInitComp>())
             {
                 Vars.items.Add(i.itemStack.AsItemStack());

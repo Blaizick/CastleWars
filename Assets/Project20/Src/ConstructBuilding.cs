@@ -40,7 +40,7 @@ namespace Proj21
 
             if (progress >= 1.0f)
             {
-                castle.FinishCostructing(this);
+                castle.FinishCostructingBuilding(this);
             }
 
             base.Update();

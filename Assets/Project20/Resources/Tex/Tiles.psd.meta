@@ -297,7 +297,7 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -306,6 +306,50 @@ TextureImporter:
       bones: []
       spriteID: 925ec94f033e2d044866ac1bfc8a2c87
       internalID: 1290040430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiles_9
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 736
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 947e87eeb47d9024aacaa70992d9d414
+      internalID: -1410003083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tiles_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 704
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b0e4c73308c42e48b890e2a4073e2e8
+      internalID: -1694988460
       vertices: []
       indices: 
       edges: []
@@ -326,6 +370,7 @@ TextureImporter:
     nameFileIdTable:
       Tiles_0: 7223950226953391895
       Tiles_1: 2123533075
+      Tiles_10: -1694988460
       Tiles_2: 1102877637
       Tiles_3: 1848016404
       Tiles_4: -1739791481
@@ -333,6 +378,7 @@ TextureImporter:
       Tiles_6: 628608470
       Tiles_7: -1213294004
       Tiles_8: 1290040430
+      Tiles_9: -1410003083
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

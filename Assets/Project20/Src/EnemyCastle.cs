@@ -16,7 +16,7 @@ namespace Proj21
 
             foreach (var i in cmsEntity.GetAllComponentsOfType<CmsCreateBuildingComp>())
             {
-                CreateBuilding(i.building.GetCmsEntity(), i.position);
+                StartConstructingBuilding(i.building.GetCmsEntity(), i.position);
             }
         }
 
@@ -132,7 +132,7 @@ namespace Proj21
                                 pos = tPos + new Vector2(UnityEngine.Random.Range(-20.0f, 20.0f), UnityEngine.Random.Range(-20.0f, 20.0f));
                             }
                             while (Vector2.Distance(tPos, pos) <= 10.0f);
-                            Vars.teams.enemy.castles.Create(i.castle.GetCmsEntity(), pos);
+                            Vars.teams.enemy.castles.StartConstructing(i.castle.GetCmsEntity(), pos);
                             progress = 0.0f;
                         }
                     }

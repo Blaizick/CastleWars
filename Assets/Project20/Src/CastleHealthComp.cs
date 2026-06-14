@@ -1,10 +1,12 @@
 
 
+using System;
+
 namespace Proj21
 {
     public class CastleHealthComp : HealthComp
     {
-        public Castle castle;
+        [NonSerialized] public Castle castle;
 
         public void Set1(Castle castle)
         {

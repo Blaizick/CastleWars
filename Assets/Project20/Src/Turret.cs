@@ -59,20 +59,25 @@ namespace Proj21
                 towerRootTr.transform.rotation = Quaternion.RotateTowards(towerRootTr.rotation, 
                     Quaternion.Euler(0.0f, 0.0f, targetRot), 
                     cmsEntity.GetComponent<CmsRotationSpeedComp>().rotationSpeed * Time.deltaTime);
-                if (projectileCount <= 0)
+
+                bool ignoreProjectileCount = teamC.team != Vars.teams.ally;
+                if (!ignoreProjectileCount)
                 {
-                    var projCost = projectile.GetComponent<CmsProjectileCostComp>();
-                    var cost = projCost.itemCost.AsItemStack();
-                    if (Vars.items.Has(cost))
+                    if (projectileCount <= 0)
                     {
-                        Vars.items.Remove(cost);
-                        this.projectile = projectile;
-                        projectileCount += projCost.count;
+                        var projCost = projectile.GetComponent<CmsProjectileCostComp>();
+                        var cost = projCost.itemCost.AsItemStack();
+                        if (Vars.items.Has(cost))
+                        {
+                            Vars.items.Remove(cost);
+                            this.projectile = projectile;
+                            projectileCount += projCost.count;
+                        }
                     }
                 }
                 if (reloadProgress >= 1.0f && 
                     Mathf.Abs(Mathf.DeltaAngle(towerRootTr.transform.eulerAngles.z, targetRot)) <= 5.0f && 
-                    projectileCount > 0)
+                    (projectileCount > 0 || ignoreProjectileCount))
                 {
                     if (--projectileCount <= 0)
                     {

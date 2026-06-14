@@ -19,6 +19,7 @@ MonoBehaviour:
   - rid: 5257562482049810507
   - rid: 5257562482049810509
   - rid: 5257562498778792188
+  - rid: 5257562568810561609
   references:
     version: 2
     RefIds:
@@ -43,3 +44,7 @@ MonoBehaviour:
       type: {class: CmsSpeedComp, ns: Proj21, asm: Assembly-CSharp}
       data:
         speed: 2
+    - rid: 5257562568810561609
+      type: {class: CmsAppearCastlePfbComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        pfb: {fileID: 5531086452428592183, guid: c268ddc06b0888b4e869de58d1dad9a7, type: 3}

@@ -7,8 +7,9 @@ namespace Proj21
 {
     public class Tile : MonoBehaviour
     {
-        [NonSerialized] public Castle castle;
+        [NonSerialized] public CastleGrid grid;
         [NonSerialized] public Vector2Int pos;
         [NonSerialized] public Building building = null;
+        public SpriteRenderer spriteRenderer;
     }
 }

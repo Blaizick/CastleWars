@@ -38,7 +38,7 @@ namespace Proj21
             writeCoroutine = StartCoroutine(_WriteCoroutine(text));
             return writeCoroutine;
         }
-        private IEnumerator _WriteCoroutine(string text)
+        public IEnumerator _WriteCoroutine(string text)
         {
             skipRequested = false;
             writingText = text;

@@ -14,7 +14,8 @@ namespace Proj21
 
         public IEnumerator TutorialCoroutine()
         {
-            Vars.player.castle = (PlayerCastle)Vars.teams.ally.castles.Create(Cms.GetEntity("TestPlayerCastle0"), Vector2.zero);
+            Vars.teams.ally.castles.StartConstructing(Cms.GetEntity("TestPlayerCastle0"), Vector2.zero).onAppear.AddListener(castle => Vars.player.castle = (PlayerCastle)castle);
+            // Vars.player.castle = (PlayerCastle)Vars.teams.ally.castles.Create(Cms.GetEntity("TestPlayerCastle0"), Vector2.zero);
             Vars.items.Add(new ItemStack(Items.Essence, 50));
             Vars.enemySpawner.active = false;
             Vars.ui.timeBlockRoot.gameObject.SetActive(false);
@@ -58,7 +59,8 @@ namespace Proj21
             }
             yield return Vars.ui.taskUiWriter.WriteCoroutine("Turrets automatically attack enemy castles and buildings.");
             yield return new WaitForSeconds(3.0f);
-            Vars.teams.enemy.castles.Create(Cms.GetEntity("TestEnemyCastle0"), new Vector2(10.0f, 0.0f));
+            yield return Vars.teams.ally.castles.StartConstructingCoroutine(Cms.GetEntity("TestEnemyCastle0"), Vector2.zero, null);
+            // Vars.teams.enemy.castles.Create(Cms.GetEntity("TestEnemyCastle0"), new Vector2(10.0f, 0.0f));
             while (Vars.teams.enemy.castles.castles.Count != 0)
             {
                 yield return null;
