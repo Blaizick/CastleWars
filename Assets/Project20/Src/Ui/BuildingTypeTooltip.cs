@@ -15,7 +15,7 @@ namespace Proj21
         public TMP_Text buildCostText;
         public GameObject root;
 
-        public void Update()
+        public void _Update()
         {
             if (Vars.input.sBuild != null)
             {

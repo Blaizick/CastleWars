@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Blaze.Runtime.Cms;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,10 +29,13 @@ namespace Proj21
             _collider.size = new Vector2(size.x, size.y);
             _collider.offset = CenterPosition - (Vector2)transform.position;
 
-            healthC.SetFromCmsEntity(cmsEntity);
-            healthC.Set1(this);
-            healthC.Init();
-            healthC.onDie.AddListener(() => teamC.team.castles.Destroy(this));
+            if (healthC)
+            {
+                healthC.SetFromCmsEntity(cmsEntity);
+                healthC.Set1(this);
+                healthC.Init();
+                healthC.onDie.AddListener(() => teamC.team.castles.StartDeconstructing(this));
+            }
         }
 
         public override void Update()
@@ -82,10 +86,10 @@ namespace Proj21
 
         public void FinishCostructingBuilding(ConstructBuilding constructBuilding)
         {
-            // var cmsEnt = constructBuilding.cmsEntity;
-            // var pos = constructBuilding.pos;
-            CreateBuilding(constructBuilding.cmsEntity, constructBuilding.pos);
             DestroyBuilding(constructBuilding);
+            var cmsEnt = constructBuilding.cmsEntity;
+            var pos = constructBuilding.pos;
+            CreateBuilding(cmsEnt, pos);
         }
 
         public void StartConstructingBuilding(CmsEntity build, Vector2Int pos)
@@ -119,32 +123,30 @@ namespace Proj21
 
         public AppearCastle StartConstructing(CmsEntity cmsEntity, Vector2 position)
         {
-            return (AppearCastle)Create(cmsEntity, position, cmsEntity.GetComponent<CmsAppearCastlePfbComp>().pfb);
+            var inst = (AppearCastle)CreateUninitialized(cmsEntity, position, Resources.Load<GameObject>("Pfb/Castles/AppearCastle"));
+            // var castle = (AppearCastle)Create(cmsEntity, position, cmsEntity.GetComponent<CmsAppearCastlePfbComp>().pfb);
+            inst._operator = new ConstructCastleOperator();
+            inst.Create(cmsEntity, team);
+            return inst;
         }
 
         public IEnumerator StartConstructingCoroutine(CmsEntity cmsEntity, Vector2 position, UnityAction<Castle> callback)
         {
             var castle = StartConstructing(cmsEntity, position);
-            castle.onAppear.AddListener(_castle => callback(_castle));
+            // Debug.Log(castle._operator.GetType());
+            // Debug.Log(((ConstructCastleOperator)castle._operator).onAppear.GetType());
+            // ((ConstructCastleOperator)castle._operator).onAppear.AddListener(d => Debug.Log(d.name));
+            ((ConstructCastleOperator)castle._operator).onAppear.AddListener(_castle => callback?.Invoke(_castle));
             while (castle)
             {
                 yield return null;
             }
         }
-        public Castle FinishConstructing(AppearCastle appearCastle)
-        {
-            var castle = Create(appearCastle.cmsEntity, appearCastle.transform.position);
-            appearCastle.onAppear.Invoke(castle);
-            DestroyQuiet(appearCastle);
-            return castle;
-        }
 
         public Castle Create(CmsEntity cmsEntity, Vector2 position, GameObject prefab)
         {
-            var inst = GameObject.Instantiate(prefab, position, Quaternion.identity).GetComponent<Castle>();
+            var inst = CreateUninitialized(cmsEntity, position, prefab);
             inst.Create(cmsEntity, team);
-            castles.Add(inst);
-            Vars.restart.destroyOnRestart.Add(inst.gameObject);
             return inst;
         }
 
@@ -153,13 +155,25 @@ namespace Proj21
             return Create(cmsEntity, position, cmsEntity.GetComponent<CmsPfbComp>().pfb);
         }
 
-        public void Destroy(Castle castle)
+        public Castle CreateUninitialized(CmsEntity cmsEntity, Vector2 position, GameObject prefab)
         {
-            Vars.effects.CreateEffect(Vars.effects.buildingDestroyEffect, castle.CenterPosition);
-            DestroyQuiet(castle);
+            var inst = GameObject.Instantiate(prefab, position, Quaternion.identity).GetComponent<Castle>();
+            castles.Add(inst);
+            Vars.restart.destroyOnRestart.Add(inst.gameObject);
+            return inst;
         }
 
-        public void DestroyQuiet(Castle castle)
+        public void StartDeconstructing(Castle castle)
+        {
+            var inst = (AppearCastle)CreateUninitialized(castle.cmsEntity, castle.transform.position, Resources.Load<GameObject>("Pfb/Castles/AppearCastle"));
+            inst._operator = new DeconstructCastleOperator();
+            inst.Create(castle.cmsEntity, team);
+            Destroy(castle);
+            // Vars.effects.CreateEffect(Vars.effects.buildingDestroyEffect, castle.CenterPosition);
+            // DestroyQuiet(castle);
+        }
+
+        public void Destroy(Castle castle)
         {
             castles.Remove(castle);
             Vars.restart.destroyOnRestart.Remove(castle.gameObject);

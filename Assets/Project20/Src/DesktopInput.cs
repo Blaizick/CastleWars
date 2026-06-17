@@ -58,7 +58,7 @@ namespace Proj21
             breaking = false;
         }
 
-        public void Update()
+        public void _Update()
         {
             if (actions.Player.CameraFollowCastle.WasPerformedThisFrame())
             {
@@ -233,6 +233,21 @@ namespace Proj21
                         }
                         breaking = false;
                     }
+                }
+            }
+
+            if (actions.Player.Pause.WasPerformedThisFrame())
+            {
+                if (Vars.ui.sceneTransitionScreen.tween == null)
+                {
+                    if (Vars.ui.pauseMenu.root.activeInHierarchy)
+                    {
+                        Vars.ui.pauseMenu.Hide();
+                    }
+                    else
+                    {
+                        Vars.ui.pauseMenu.Show();
+                    }    
                 }
             }
         }

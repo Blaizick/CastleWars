@@ -20,7 +20,7 @@ namespace Proj21
             }
         }
 
-        public void Update()
+        public void _Update()
         {
             foreach (var (k, v) in instancesDic)
             {

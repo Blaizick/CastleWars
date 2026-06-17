@@ -10,6 +10,7 @@ namespace Proj21
         public InputSystem_Actions actions;
 
         [NonSerialized] public float cameraTargetZoom;
+        [NonSerialized] public Vector2 mousePos;
 
         public void Init()
         {
@@ -39,6 +40,14 @@ namespace Proj21
                 // float zoomDt = actions.Player.Zoom.ReadValue<float>() * -0.5f;
                 // cameraTargetZoom = Mathf.Clamp(cameraTargetZoom + zoomDt, 1.0f, 20.0f);
                 // Vars.camera.Lens.OrthographicSize = Mathf.Lerp(Vars.camera.Lens.OrthographicSize, cameraTargetZoom, 30.0f * Time.unscaledDeltaTime);
+            }
+
+            mousePos = actions.Player.MousePos.ReadValue<Vector2>();
+            if (Vars.uiMenu.mainUiRoot.activeInHierarchy)
+            {
+                Vector2 centerPos = new Vector2(Screen.width, Screen.height) / 2.0f;
+                Vector2 dif = (mousePos - centerPos) / 500.0f;
+                Vars.camera.transform.position = new Vector3(dif.x, dif.y, -10.0f);
             }
         }
     }

@@ -51,6 +51,10 @@ namespace Proj21
 
         public SceneTransitionScreen sceneTransitionScreen;
 
+        public PauseMenu pauseMenu;
+
+        public Button pauseMenuBtn;
+
         public void Init()
         {
             buildingTypeSelect.Init();
@@ -81,10 +85,7 @@ namespace Proj21
             });
             winScreenBackToMenuBtn.onClick.AddListener(() =>
             {
-                sceneTransitionScreen.PlayShowAnim(() =>
-                {
-                    Vars.levels.BackToMenu();
-                });
+                Vars.levels.BackToMenu();
             });
 
             loseScreenRoot.SetActive(false);
@@ -94,22 +95,40 @@ namespace Proj21
             });
             loseScreenBackToMenuBtn.onClick.AddListener(() =>
             {
-                sceneTransitionScreen.PlayShowAnim(() =>
+                Vars.levels.BackToMenu();
+            });
+
+            pauseMenu.Init();
+
+            pauseMenuBtn.onClick.AddListener(() =>
+            {
+                if (sceneTransitionScreen.tween == null)
                 {
-                    Vars.levels.BackToMenu();
-                });
+                    if (pauseMenu.root.activeInHierarchy)
+                    {
+                        pauseMenu.Hide();
+                    }
+                    else
+                    {
+                        pauseMenu.Show();
+                    }
+                }
             });
 
             sceneTransitionScreen.PlayHideAnim();
+
+            items._Update();
+            buildingTypeTooltip._Update();
         }
 
         public void Restart()
         {
             loseScreenRoot.SetActive(false);
             winScreenRoot.SetActive(false);
+            pauseMenu.Restart();
         }
 
-        public void Update()
+        public void _Update()
         {
             cameraFollowCastleState.root.SetActive(!Vars.input.cameraFollowCastle);
             cameraNotFollowCastleState.root.SetActive(Vars.input.cameraFollowCastle);

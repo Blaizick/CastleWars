@@ -1,83 +1,23 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Blaze.Runtime.Cms;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace Proj21
 {
     public class ImpsMain : MonoBehaviour
     {
-        public Player player;
-        public DesktopInput input;
-        public CinemachineCamera _camera;
-        public UiMain ui;
-        public TutorialSystem tutorial;
-        public EffectsSystem effects;
+        public static ImpsMain instance;
 
-        void Start()
+        public Collider2D confiderCollider;
+    
+        public void Awake()
         {
-            StartCoroutine(InitCoroutine());
-        }
-
-        IEnumerator InitCoroutine()
-        {
-            Vars.player = player;
-            Vars.input = input;
-            Vars.camera = _camera;
-            Vars.ui = ui;
-            Vars.items = new();
-            Vars.teams = new();
-            Vars.enemySpawner = new();
-            Vars.sessionTimer = new();
-            Vars.tutorial = tutorial;
-            Vars.restart = new();
-            Vars.effects = effects;
-            Vars.levels = new();
-            Vars.saveSystem = new();
-
-            Vars.saveSystem.Load();
-
-            Vars.sessionTimer.Restart();
-            Vars.teams.Init();
-            Vars.input.Init();
-            Vars.player.Init();
-            Vars.enemySpawner.Init();
-            Vars.ui.Init();
-            Vars.tutorial.Init();
-
-            if (LevelsSystem.level.HasComponent<CmsTutorialLevelTag>())
-            {
-                yield return StartCoroutine(Vars.tutorial.TutorialCoroutine());
-            }
-            else
-            {
-                Vars.restart.Restart();
-            }
-
-            yield break;
-        }
-
-        void Update()
-        {
-            Vars.enemySpawner.Update();
-
-            Vars.camera.GetComponent<CinemachineConfiner2D>().InvalidateLensCache();
-
-            if (Vars.levels.CanBeFinished && Vars.levels.Finished)
-            {
-                Vars.enemySpawner.active = false;
-                if (Vars.teams.enemy.castles.castles.Count == 0)
-                {
-                    Vars.levels.Complete(LevelsSystem.level);
-                    Vars.ui.winScreenRoot.SetActive(true);
-                }
-            }
+            instance = this;
         }
     }
 
@@ -213,6 +153,8 @@ namespace Proj21
             Vars.teams.Restart();
             Vars.ui.Restart();
             Vars.levels.Restart();
+
+            Time.timeScale = 1.0f;
         }
     }
 
@@ -233,12 +175,12 @@ namespace Proj21
 
         public void LoadLevel()
         {
-            SceneManager.LoadScene("SampleScene");
+            SceneManager.LoadScene("BaseScene", LoadSceneMode.Single);
         }
 
         public void Restart()
         {
-            Vars.teams.ally.castles.StartConstructing(level.GetComponent<CmsPlayerCastleComp>().playerCastle.GetCmsEntity(), Vector2.zero).onAppear.AddListener(castle => Vars.player.castle = (PlayerCastle)castle);
+            ((ConstructCastleOperator)Vars.teams.ally.castles.StartConstructing(level.GetComponent<CmsPlayerCastleComp>().playerCastle.GetCmsEntity(), Vector2.zero)._operator).onAppear.AddListener(castle => Vars.player.castle = (PlayerCastle)castle);
             // Vars.player.castle = (PlayerCastle)Vars.teams.ally.castles.Create(level.GetComponent<CmsPlayerCastleComp>().playerCastle.GetCmsEntity(), Vector2.zero);
             foreach (var i in level.GetAllComponentsOfType<CmsAddItemStackOnInitComp>())
             {
@@ -248,7 +190,10 @@ namespace Proj21
 
         public void BackToMenu()
         {
-            SceneManager.LoadScene("MenuScene");
+            Vars.ui.sceneTransitionScreen.PlayShowAnim(() =>
+            {
+                SceneManager.LoadScene("MenuScene");
+            });
         }
 
         public void Complete(CmsEntity _level)

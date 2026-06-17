@@ -20,7 +20,7 @@ MonoBehaviour:
   - rid: 5257562482049810509
   - rid: 5257562498778792189
   - rid: 5257562498778792190
-  - rid: 5257562568810561611
+  - rid: 5257562595731439692
   references:
     version: 2
     RefIds:
@@ -51,7 +51,7 @@ MonoBehaviour:
       data:
         position: {x: 2, y: 2}
         building: {fileID: 11400000, guid: f9f39bd95ca46914eb38d611ab9fa811, type: 2}
-    - rid: 5257562568810561611
-      type: {class: CmsAppearCastlePfbComp, ns: Proj21, asm: Assembly-CSharp}
+    - rid: 5257562595731439692
+      type: {class: CmsOutlineColorComp, ns: Proj21, asm: Assembly-CSharp}
       data:
-        pfb: {fileID: 5531086452428592183, guid: 576dec049f18d0a459b0c8f9f548c1be, type: 3}
+        outlineColor: {r: 0.15294118, g: 0, b: 0, a: 1}

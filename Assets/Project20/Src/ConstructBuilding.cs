@@ -2,6 +2,7 @@
 
 using System;
 using Blaze.Runtime.Cms;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Proj21
@@ -21,7 +22,7 @@ namespace Proj21
             spriteRenderer.GetPropertyBlock(propertyBlock);
 
             propertyBlock.SetVector("_uvOffset", new Vector2(UnityEngine.Random.Range(-10000, 10000), UnityEngine.Random.Range(-10000, 10000)));
-            propertyBlock.SetFloat("_noiseScale", 200.0f / Size);
+            propertyBlock.SetVector("_noiseScale", NoiseUtils.GetScale(new Vector2(Size, Size), spriteRenderer.sprite.texture));
 
             spriteRenderer.SetPropertyBlock(propertyBlock);
 

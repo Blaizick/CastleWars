@@ -45,11 +45,18 @@ namespace Proj21
 
         public virtual void Init()
         {
-            outlineSpriteRenderer.transform.position = CenterPosition;
-            outlineSpriteRenderer.transform.localScale = new Vector2(size.x + 0.2f, size.y + 0.2f);
+            if (outlineSpriteRenderer)
+            {
+                outlineSpriteRenderer.color = cmsEntity.GetComponent<CmsOutlineColorComp>().outlineColor;
+                outlineSpriteRenderer.transform.position = CenterPosition;
+                outlineSpriteRenderer.transform.localScale = new Vector2(size.x + 0.2f, size.y + 0.2f);
+            }
 
-            shadowSpriteRenderer.transform.position = CenterPosition - new Vector2(0.2f, 0.2f);
-            shadowSpriteRenderer.transform.localScale = new Vector2(size.x + 0.2f, size.y + 0.2f);
+            if (shadowSpriteRenderer)
+            {
+                shadowSpriteRenderer.transform.position = CenterPosition - new Vector2(0.2f, 0.2f);
+                shadowSpriteRenderer.transform.localScale = new Vector2(size.x + 0.2f, size.y + 0.2f);
+            }
         }
 
         public virtual void Update()
@@ -149,5 +156,11 @@ namespace Proj21
                 return pos;
             }
         }
+    }
+
+    [Serializable]
+    public class CmsOutlineColorComp : CmsComponent
+    {
+        public Color outlineColor;
     }
 }

@@ -21,6 +21,7 @@ MonoBehaviour:
   - rid: 5257562541538410589
   - rid: 5257562541538410590
   - rid: 5257562541538410592
+  - rid: 5257562621322461455
   references:
     version: 2
     RefIds:
@@ -60,3 +61,9 @@ MonoBehaviour:
       type: {class: CmsSpriteComp, ns: Proj21, asm: Assembly-CSharp}
       data:
         sprite: {fileID: 524364033, guid: ed6019e49749b924f8619a9d611598ea, type: 3}
+    - rid: 5257562621322461455
+      type: {class: CmsLevelSceneComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        scene:
+          asset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
+          guid: 8c9cfa26abfee488c85f1582747f6a02
