@@ -12,7 +12,7 @@ namespace Proj21
     {
         public Player player;
         public DesktopInput input;
-        public CinemachineCamera _camera;
+        public CustomCamera _camera;
         public UiMain ui;
         public TutorialSystem tutorial;
         public EffectsSystem effects;
@@ -54,7 +54,11 @@ namespace Proj21
             Vars.enemySpawner.Init();
             Vars.ui.Init();
             Vars.tutorial.Init();
+            Vars.camera.Init();
+            Vars.camera.zoomSpeed = 30.0f;
             Vars.camera.GetComponent<CinemachineConfiner2D>().BoundingShape2D = impsMain.confiderCollider;
+            ImpsMain.instance.wallShadowTilemap.Init();
+            ImpsMain.instance.decorationShadowTilemap.Init();
 
             if (LevelsSystem.level.HasComponent<CmsTutorialLevelTag>())
             {
@@ -68,7 +72,6 @@ namespace Proj21
             while (true)
             {
                 Vars.enemySpawner.Update();
-                Vars.camera.GetComponent<CinemachineConfiner2D>().InvalidateLensCache();
                 if (Vars.levels.CanBeFinished && Vars.levels.Finished)
                 {
                     Vars.enemySpawner.active = false;

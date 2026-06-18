@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe606e5d83f1d442a63d9c065965568, type: 3}
+  m_Name: Mender
+  m_EditorClassIdentifier: com.blaizi.blaze.runtime::Blaze.Runtime.Cms.CmsEntityPfb
+  id: Mender
+  components:
+  - rid: 5257562640016998475
+  - rid: 5257562640016998476
+  - rid: 5257562640016998478
+  - rid: 5257562640016998479
+  - rid: 5257562640016998480
+  - rid: 5257562640016998481
+  - rid: 5257562640016998483
+  - rid: 5257562640016998484
+  - rid: 5257562640016998486
+  - rid: 5257562640016998487
+  - rid: 5257562640016998488
+  - rid: 5257562640016998489
+  - rid: 5257562640016998490
+  references:
+    version: 2
+    RefIds:
+    - rid: 5257562640016998475
+      type: {class: CmsNameComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        name: Mender
+    - rid: 5257562640016998476
+      type: {class: CmsSpriteComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        sprite: {fileID: -964254212, guid: e35c3bf0c362c264c8ddfdbb63308936, type: 3}
+    - rid: 5257562640016998478
+      type: {class: CmsSquareSizeComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        size: 1
+    - rid: 5257562640016998479
+      type: {class: CmsConstructTimeComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        constructTime: 1
+    - rid: 5257562640016998480
+      type: {class: CmsHealthComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        maxHealth: 50
+    - rid: 5257562640016998481
+      type: {class: CmsPfbComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        pfb: {fileID: 4906769222331495048, guid: 1b6560a692844cb4c80360441fa3a3c2, type: 3}
+    - rid: 5257562640016998483
+      type: {class: CmsDescComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        desc: Heals buildings nearby
+    - rid: 5257562640016998484
+      type: {class: CmsBuildCostComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        cost:
+          item: {fileID: 11400000, guid: b5b2881195a4e3a43949b6721e458a6b, type: 2}
+          count: 50
+    - rid: 5257562640016998486
+      type: {class: CmsHealComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        heal: 25
+    - rid: 5257562640016998487
+      type: {class: CmsReloadTimeComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        reloadTime: 1
+    - rid: 5257562640016998488
+      type: {class: CmsRangeComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        range: 5
+    - rid: 5257562640016998489
+      type: {class: CmsMenderCirclePfbComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        pfb: {fileID: 954920887065259221, guid: 9362eef3b1c04bc4588b44f487ede05a, type: 3}
+    - rid: 5257562640016998490
+      type: {class: CmsMenderCircleComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        lifetime: 0.5
+        minScale: 0.75
+        maxScale: 1.25
+        col0: {r: 1, g: 1, b: 1, a: 0.19607843}
+        col1: {r: 1, g: 1, b: 1, a: 1}

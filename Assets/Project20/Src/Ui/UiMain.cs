@@ -116,9 +116,6 @@ namespace Proj21
             });
 
             sceneTransitionScreen.PlayHideAnim();
-
-            items._Update();
-            buildingTypeTooltip._Update();
         }
 
         public void Restart()
@@ -146,6 +143,9 @@ namespace Proj21
             }
             
             buildingTypeTooltip.root.SetActive(Vars.input.sBuild != null);
+        
+            items._Update();
+            buildingTypeTooltip._Update();
         }
     }
 }

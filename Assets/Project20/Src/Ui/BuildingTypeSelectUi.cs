@@ -73,7 +73,9 @@ namespace Proj21
         public static CmsEntity Turret => Cms.GetEntity("Turret");
         public static CmsEntity Collector => Cms.GetEntity("Collector");
         public static CmsEntity SniperTurret => Cms.GetEntity("SniperTurret");
+        public static CmsEntity Wall => Cms.GetEntity("Wall");
+        public static CmsEntity Mender => Cms.GetEntity("Mender");
 
-        public static List<CmsEntity> All => new(){Turret, Collector, SniperTurret,};
+        public static List<CmsEntity> All => new(){Turret, Collector, SniperTurret, Wall, Mender,};
     }
 }

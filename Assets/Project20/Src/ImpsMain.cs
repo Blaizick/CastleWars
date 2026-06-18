@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Blaze;
 using Blaze.Runtime.Cms;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -14,7 +15,10 @@ namespace Proj21
         public static ImpsMain instance;
 
         public Collider2D confiderCollider;
-    
+
+        public ShadowTilemap wallShadowTilemap;
+        public ShadowTilemap decorationShadowTilemap;
+
         public void Awake()
         {
             instance = this;
@@ -25,7 +29,7 @@ namespace Proj21
     {
         public static Player player;
         public static DesktopInput input;
-        public static CinemachineCamera camera;
+        public static CustomCamera camera;
         public static UiMain ui;
         public static ItemsSystem items; 
         public static TeamSystem teams;
@@ -145,8 +149,8 @@ namespace Proj21
             destroyOnRestart = new();
 
             Vars.sessionTimer.Restart();
+            Vars.camera.Init();
             Vars.camera.transform.position = new Vector3(0.0f, 0.0f, -10.0f);
-            Vars.camera.Lens.OrthographicSize = 8.0f;
             Vars.enemySpawner.Restart();
             Vars.input.Restart();
             Vars.items.Reset();
@@ -180,7 +184,7 @@ namespace Proj21
 
         public void Restart()
         {
-            ((ConstructCastleOperator)Vars.teams.ally.castles.StartConstructing(level.GetComponent<CmsPlayerCastleComp>().playerCastle.GetCmsEntity(), Vector2.zero)._operator).onAppear.AddListener(castle => Vars.player.castle = (PlayerCastle)castle);
+            Vars.teams.ally.castles.StartConstructing(level.GetComponent<CmsPlayerCastleComp>().playerCastle.GetCmsEntity(), Vector2.zero);
             // Vars.player.castle = (PlayerCastle)Vars.teams.ally.castles.Create(level.GetComponent<CmsPlayerCastleComp>().playerCastle.GetCmsEntity(), Vector2.zero);
             foreach (var i in level.GetAllComponentsOfType<CmsAddItemStackOnInitComp>())
             {

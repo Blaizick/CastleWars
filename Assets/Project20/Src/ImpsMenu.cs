@@ -10,7 +10,7 @@ namespace Proj21
     public class ImpsMenu : MonoBehaviour
     {
         public UiMenu ui;
-        public CinemachineCamera _camera;
+        public CustomCamera _camera;
         public DesktopInputMenu input;
         public ContentLoader contentLoader;
 
@@ -33,6 +33,8 @@ namespace Proj21
 
             Vars.inputMenu.Init();
             Vars.uiMenu.Init();
+            Vars.camera.zoomSpeed = 30.0f;
+            Vars.camera.Init();
 
             yield break;
         }

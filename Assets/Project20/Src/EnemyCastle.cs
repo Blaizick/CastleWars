@@ -24,9 +24,9 @@ namespace Proj21
         {
             base.Update();
 
-            if (Vars.player && Vars.player.castle)
+            if (Vars.player && Vars.player.Castle)
             {
-                rb.linearVelocity = (Vars.player.castle.transform.position - transform.position).normalized;
+                rb.linearVelocity = (Vars.player.Castle.transform.position - transform.position).normalized;
             }
             else
             {
@@ -79,7 +79,7 @@ namespace Proj21
 
         public void Update()
         {
-            if (!Vars.player || !Vars.player.castle)
+            if (!Vars.player || !Vars.player.Castle)
             {
                 return;
             }
@@ -125,7 +125,7 @@ namespace Proj21
                     {
                         for (int j = 0; j < i.count; j++)
                         {
-                            Vector2 tPos = Vars.player.castle.transform.position;
+                            Vector2 tPos = Vars.player.Castle.transform.position;
                             Vector2 pos = Vector2.zero;
                             do
                             {

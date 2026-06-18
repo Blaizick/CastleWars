@@ -16,8 +16,6 @@ namespace Proj21
         {
             actions = new();
             actions.Enable();
-
-            cameraTargetZoom = Vars.camera.Lens.OrthographicSize;
         }
 
         public void OnDestroy()
@@ -32,7 +30,7 @@ namespace Proj21
             {
                 if (actions.Player.MouseWheel.IsPressed() || actions.Player.Place.IsPressed())
                 {
-                    Vector2 delta = actions.Player.MouseDelta.ReadValue<Vector2>() / 80.0f * (Vars.camera.Lens.OrthographicSize / 8.0f);
+                    Vector2 delta = actions.Player.MouseDelta.ReadValue<Vector2>() / 80.0f * (Vars.camera.Zoom / 8.0f);
                     Vector2 pos = (Vector2)Vars.camera.transform.position - delta;
                     Vars.camera.transform.position = new Vector3(pos.x, pos.y, -10.0f);
                 }

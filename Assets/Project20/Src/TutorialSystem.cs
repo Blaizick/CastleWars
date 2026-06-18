@@ -14,7 +14,7 @@ namespace Proj21
 
         public IEnumerator TutorialCoroutine()
         {
-            ((ConstructCastleOperator)Vars.teams.ally.castles.StartConstructing(Cms.GetEntity("TestPlayerCastle0"), Vector2.zero)._operator).onAppear.AddListener(castle => Vars.player.castle = (PlayerCastle)castle);
+            Vars.teams.ally.castles.StartConstructing(Cms.GetEntity("TestPlayerCastle0"), Vector2.zero);
             // Vars.player.castle = (PlayerCastle)Vars.teams.ally.castles.Create(Cms.GetEntity("TestPlayerCastle0"), Vector2.zero);
             Vars.items.Add(new ItemStack(Items.Essence, 50));
             Vars.enemySpawner.active = false;
@@ -41,7 +41,7 @@ namespace Proj21
                 yield return null;
             }
             yield return Vars.ui.taskUiWriter.WriteCoroutine($"Build a {collector.GetComponent<CmsNameComp>().name} on your castle (Left Mouse Button).");
-            while (!Vars.player.castle.buildings.Find(i => i.cmsEntity == collector))
+            while (!Vars.player.Castle.buildings.Find(i => i.cmsEntity == collector))
             {
                 yield return null;
             }
@@ -53,7 +53,7 @@ namespace Proj21
                 yield return null;
             }
             yield return Vars.ui.taskUiWriter.WriteCoroutine($"Build a {turret.GetComponent<CmsNameComp>().name}");
-            while (!Vars.player.castle.buildings.Find(i => i.cmsEntity == turret))
+            while (!Vars.player.Castle.buildings.Find(i => i.cmsEntity == turret))
             {
                 yield return null;
             }
@@ -66,12 +66,12 @@ namespace Proj21
                 yield return null;
             }
             yield return Vars.ui.taskUiWriter.WriteCoroutine($"You can move your castle. Switch to Castle Control Mode ({Vars.input.actions.Player.SwitchCastlesMode.GetBindingDisplayString()} or the button in the bottom-left corner), then Right Mouse Button to move.");
-            while (!Vars.player.castle.moving)
+            while (!Vars.player.Castle.moving)
             {
                 yield return null;
             }
             yield return Vars.ui.taskUiWriter.WriteCoroutine("Remove all the shit you recently placed (select them with Right Mouse Button in Building Mode).");
-            while (Vars.player.castle.buildings.Count != 0)
+            while (Vars.player.Castle.buildings.Count != 0)
             {
                 yield return null;
             }

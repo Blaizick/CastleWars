@@ -17,8 +17,6 @@ namespace Proj21
         [NonSerialized] public Vector2Int mouseGridPos;
         [NonSerialized] public Vector2Int buildGridPos;
 
-        [NonSerialized] public float cameraTargetZoom;
-
         public Transform sPlanTr;
         public SpriteRenderer sPlanSpriteRenderer;
         public CmsEntity sBuild;
@@ -40,8 +38,6 @@ namespace Proj21
         {
             actions = new();
             actions.Enable();
-
-            cameraTargetZoom = Vars.camera.Lens.OrthographicSize;
         }
 
         public void OnDestroy()
@@ -67,9 +63,9 @@ namespace Proj21
             
             if (cameraFollowCastle)
             {
-                if (Vars.player && Vars.player.castle)
+                if (Vars.player && Vars.player.Castle)
                 {
-                    Vector2 pos = Vector2.MoveTowards(Vars.camera.transform.position, Vars.player.castle.CenterPosition, 100.0f * Time.unscaledDeltaTime);
+                    Vector2 pos = Vector2.MoveTowards(Vars.camera.transform.position, Vars.player.Castle.CenterPosition, 100.0f * Time.unscaledDeltaTime);
                     Vars.camera.transform.position = new Vector3(pos.x, pos.y, -10.0f);
                 }
             }
@@ -77,21 +73,20 @@ namespace Proj21
             {
                 if (actions.Player.MouseWheel.IsPressed())
                 {
-                    Vector2 delta = actions.Player.MouseDelta.ReadValue<Vector2>() / 80.0f * (Vars.camera.Lens.OrthographicSize / 8.0f);
+                    Vector2 delta = actions.Player.MouseDelta.ReadValue<Vector2>() / 80.0f * (Vars.camera.Zoom / 8.0f);
                     Vector2 pos = (Vector2)Vars.camera.transform.position - delta;
                     Vars.camera.transform.position = new Vector3(pos.x, pos.y, -10.0f);
                 }
             }
 
             float zoomDt = actions.Player.Zoom.ReadValue<float>() * -0.5f;
-            cameraTargetZoom = Mathf.Clamp(cameraTargetZoom + zoomDt, 1.0f, 20.0f);
-            Vars.camera.Lens.OrthographicSize = Mathf.Lerp(Vars.camera.Lens.OrthographicSize, cameraTargetZoom, 30.0f * Time.unscaledDeltaTime);
+            Vars.camera.targetZoom = Mathf.Clamp(Vars.camera.targetZoom + zoomDt, 1.0f, 20.0f);
 
             mousePos = actions.Player.MousePos.ReadValue<Vector2>();
             mouseWorldPos = Camera.main.ScreenToWorldPoint(mousePos);
-            if (Vars.player && Vars.player.castle)
+            if (Vars.player && Vars.player.Castle)
             {
-                mouseGridPos = Vars.player.castle.WorldToGridPosition(mouseWorldPos);
+                mouseGridPos = Vars.player.Castle.WorldToGridPosition(mouseWorldPos);
             }
 
             pointerOverGameObject = EventSystem.current.IsPointerOverGameObject();
@@ -112,16 +107,16 @@ namespace Proj21
                     breaking = false;
                 }
             }
-            if (Vars.player && Vars.player.castle)
+            if (Vars.player && Vars.player.Castle)
             {
-                Vars.player.castle.selectSprite.gameObject.SetActive(castlesMode);
-                Vars.player.castle.pathEndSprite.gameObject.SetActive(castlesMode && Vars.player.castle.moving);
-                Vars.player.castle.pathLineRenderer.gameObject.SetActive(castlesMode && Vars.player.castle.moving);
+                Vars.player.Castle.selectSprite.gameObject.SetActive(castlesMode);
+                Vars.player.Castle.pathEndSprite.gameObject.SetActive(castlesMode && Vars.player.Castle.moving);
+                Vars.player.Castle.pathLineRenderer.gameObject.SetActive(castlesMode && Vars.player.Castle.moving);
             }
 
             sPlanTr.gameObject.SetActive(sBuild != null);
 
-            if (sBuild != null && Vars.player && Vars.player.castle)
+            if (sBuild != null && Vars.player && Vars.player.Castle)
             {
                 int size = sBuild.GetComponent<CmsSquareSizeComp>().size;
 
@@ -130,11 +125,11 @@ namespace Proj21
                 {
                     tmp -= Vector2.one / 2;
                 }
-                buildGridPos = Vars.player.castle.WorldToGridPosition(tmp);
+                buildGridPos = Vars.player.Castle.WorldToGridPosition(tmp);
 
                 sPlanSpriteRenderer.sprite = sBuild.GetComponent<CmsSpriteComp>().sprite;
-                sPlanTr.transform.position = Vars.player.castle.GetRectPosition(buildGridPos, size);            
-                if (Vars.player.castle.CanPlaceBuilding(buildGridPos, size))
+                sPlanTr.transform.position = Vars.player.Castle.GetRectPosition(buildGridPos, size);            
+                if (Vars.player.Castle.CanPlaceBuilding(buildGridPos, size))
                 {
                     sPlanSpriteRenderer.color = new Color(0.25f, 0.25f, 0.65f, 0.65f);
                 }
@@ -148,9 +143,9 @@ namespace Proj21
             {
                 if (!castlesMode)
                 {
-                    if (sBuild != null && Vars.player && Vars.player.castle && !pointerOverGameObject)
+                    if (sBuild != null && Vars.player && Vars.player.Castle && !pointerOverGameObject)
                     {
-                        if (Vars.player.castle.CanPlaceBuilding(buildGridPos, sBuild.GetComponent<CmsSquareSizeComp>().size))
+                        if (Vars.player.Castle.CanPlaceBuilding(buildGridPos, sBuild.GetComponent<CmsSquareSizeComp>().size))
                         {
                             bool success = true;
                             foreach (var c in sBuild.GetAllComponentsOfType<CmsBuildCostComp>())
@@ -167,7 +162,7 @@ namespace Proj21
                                 {
                                     Vars.items.Remove(c.cost.AsItemStack());
                                 }
-                                Vars.player.castle.StartConstructingBuilding(sBuild, buildGridPos);
+                                Vars.player.Castle.StartConstructingBuilding(sBuild, buildGridPos);
                                 // Vars.player.castle.CreateBuilding(sBuild, buildGridPos);
                             }
                         }
@@ -178,11 +173,11 @@ namespace Proj21
 
             if (actions.Player.Break.WasPerformedThisFrame())
             {
-                if (Vars.player && Vars.player.castle)
+                if (Vars.player && Vars.player.Castle)
                 {
                     if (castlesMode)
                     {
-                        Vars.player.castle.MoveTo(mouseWorldPos);
+                        Vars.player.Castle.MoveTo(mouseWorldPos);
                     }
                     else
                     {
@@ -204,15 +199,15 @@ namespace Proj21
 
             breakSelectionRoot.gameObject.SetActive(breaking);
 
-            if (!castlesMode && Vars.player && Vars.player.castle)
+            if (!castlesMode && Vars.player && Vars.player.Castle)
             {   
                 breakSelectionPos1 = mouseGridPos;
 
                 Vector2Int min = new Vector2Int(Math.Min(breakSelectionPos0.x, breakSelectionPos1.x), Math.Min(breakSelectionPos0.y, breakSelectionPos1.y));
                 Vector2Int max = new Vector2Int(Math.Max(breakSelectionPos0.x, breakSelectionPos1.x), Math.Max(breakSelectionPos0.y, breakSelectionPos1.y));
     
-                Vector2 minW = Vars.player.castle.GridToWorldPosition(min) - (Vector2.one / 2);
-                Vector2 maxW = Vars.player.castle.GridToWorldPosition(max) + (Vector2.one / 2);
+                Vector2 minW = Vars.player.Castle.GridToWorldPosition(min) - (Vector2.one / 2);
+                Vector2 maxW = Vars.player.Castle.GridToWorldPosition(max) + (Vector2.one / 2);
                 
                 Vector2 minS = Camera.main.WorldToScreenPoint(minW);
                 Vector2 maxS = Camera.main.WorldToScreenPoint(maxW);
@@ -224,11 +219,11 @@ namespace Proj21
                 {
                     if (breaking)
                     {
-                        foreach (var t in Vars.player.castle.GetTilesInRect(new RectInt(min, max - min + Vector2Int.one)))
+                        foreach (var t in Vars.player.Castle.GetTilesInRect(new RectInt(min, max - min + Vector2Int.one)))
                         {
                             if (t.building)
                             {
-                                Vars.player.castle.DestroyBuilding(t.building);
+                                Vars.player.Castle.DestroyBuilding(t.building);
                             }
                         }
                         breaking = false;
@@ -263,10 +258,10 @@ namespace Proj21
 
         void OnDrawGizmos()
         {
-            if (Vars.player && Vars.player.castle)
+            if (Vars.player && Vars.player.Castle)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawWireCube(Vars.player.castle.GridToWorldPosition(mouseGridPos), Vector3.one);
+                Gizmos.DrawWireCube(Vars.player.Castle.GridToWorldPosition(mouseGridPos), Vector3.one);
             }
         }
     }

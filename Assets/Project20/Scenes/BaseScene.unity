@@ -1264,7 +1264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Proj21.ImpsBase
   player: {fileID: 203418753}
   input: {fileID: 203418752}
-  _camera: {fileID: 594458372}
+  _camera: {fileID: 594458375}
   ui: {fileID: 940620325}
   tutorial: {fileID: 203418751}
   effects: {fileID: 203418750}
@@ -3026,6 +3026,7 @@ GameObject:
   - component: {fileID: 594458373}
   - component: {fileID: 594458372}
   - component: {fileID: 594458374}
+  - component: {fileID: 594458375}
   m_Layer: 0
   m_Name: Cinemachine Camera
   m_TagString: Untagged
@@ -3112,6 +3113,20 @@ MonoBehaviour:
     MaxWindowSize: 0
     Padding: 0
   m_LegacyMaxWindowSize: -2
+--- !u!114 &594458375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 594458371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 264ddd5c5b4490444a14a75a2d034594, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Proj21.CustomCamera
+  cinemachineCamera: {fileID: 594458372}
+  zoomSpeed: 0
 --- !u!1 &595946624
 GameObject:
   m_ObjectHideFlags: 0
@@ -7188,7 +7203,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000022888184}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 110}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1959356702
