@@ -55,6 +55,9 @@ namespace Proj21
 
         public Button pauseMenuBtn;
 
+        public TechTreeUi techTree;
+        public Button techTreeBtn;
+
         public void Init()
         {
             buildingTypeSelect.Init();
@@ -116,6 +119,12 @@ namespace Proj21
             });
 
             sceneTransitionScreen.PlayHideAnim();
+            
+            techTree.Init();
+            techTreeBtn.onClick.AddListener(() =>
+            {
+                techTree.Show();
+            });
         }
 
         public void Restart()
@@ -123,6 +132,7 @@ namespace Proj21
             loseScreenRoot.SetActive(false);
             winScreenRoot.SetActive(false);
             pauseMenu.Restart();
+            techTree.root.SetActive(false);
         }
 
         public void _Update()

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfe606e5d83f1d442a63d9c065965568, type: 3}
+  m_Name: WallTech
+  m_EditorClassIdentifier: com.blaizi.blaze.runtime::Blaze.Runtime.Cms.CmsEntityPfb
+  id: WallTech
+  components:
+  - rid: 5257562712914264139
+  - rid: 5257562712914264143
+  - rid: 5257562712914264144
+  references:
+    version: 2
+    RefIds:
+    - rid: 5257562712914264139
+      type: {class: CmsNameComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        name: Wall
+    - rid: 5257562712914264143
+      type: {class: CmsPosComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        position: {x: 160, y: 160}
+    - rid: 5257562712914264144
+      type: {class: CmsRequiredTechComp, ns: Proj21, asm: Assembly-CSharp}
+      data:
+        tech: {fileID: 11400000, guid: 2bea151e3af138f459a8e83272cd9a32, type: 2}

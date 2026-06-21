@@ -8,14 +8,16 @@ namespace Proj21
     {
         public static CmsEntity TutorialLevel => Cms.GetEntity("TutorialLevel");
         public static CmsEntity Level1 => Cms.GetEntity("Level1");
+        public static CmsEntity Level2 => Cms.GetEntity("Level2");
     
-        public static List<CmsEntity> All => new(){TutorialLevel, Level1};
+        public static List<CmsEntity> All => new(){TutorialLevel, Level1, Level2,};
     }
 
     public class LevelsMap : MonoBehaviour
     {
         public LevelMapLevelUiCntPfb tutorialLevel;
         public LevelMapLevelUiCntPfb level1;
+        public LevelMapLevelUiCntPfb level2;
 
         public Dictionary<CmsEntity, LevelMapLevelUiCntPfb> levelToUiCntPfbDic = new();
 
@@ -23,6 +25,7 @@ namespace Proj21
         {
             Register(Levels.TutorialLevel, tutorialLevel);
             Register(Levels.Level1, level1);
+            Register(Levels.Level2, level2);
 
             foreach (var (level, uiCntPfb) in levelToUiCntPfbDic)
             {

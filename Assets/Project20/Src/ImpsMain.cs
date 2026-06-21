@@ -42,6 +42,8 @@ namespace Proj21
         public static UiMenu uiMenu;
         public static DesktopInputMenu inputMenu;
         public static SaveSystem saveSystem;
+        public static QuintEssenceSystem quintEssence;
+        public static ResearchSystem researches;
     }
 
     [Serializable]

@@ -4,6 +4,7 @@ using Blaze.Runtime.Cms;
 using Eflatun.SceneReference;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace Proj21
@@ -44,6 +45,8 @@ namespace Proj21
             Vars.effects = effects;
             Vars.levels = new();
             Vars.saveSystem = new();
+            Vars.researches = new();
+            Vars.quintEssence = new();
 
             Vars.saveSystem.Load();
 
@@ -52,6 +55,7 @@ namespace Proj21
             Vars.input.Init();
             Vars.player.Init();
             Vars.enemySpawner.Init();
+            Vars.researches.Init();
             Vars.ui.Init();
             Vars.tutorial.Init();
             Vars.camera.Init();
@@ -59,6 +63,8 @@ namespace Proj21
             Vars.camera.GetComponent<CinemachineConfiner2D>().BoundingShape2D = impsMain.confiderCollider;
             ImpsMain.instance.wallShadowTilemap.Init();
             ImpsMain.instance.decorationShadowTilemap.Init();
+
+            Vars.quintEssence.Add(10000);
 
             if (LevelsSystem.level.HasComponent<CmsTutorialLevelTag>())
             {
